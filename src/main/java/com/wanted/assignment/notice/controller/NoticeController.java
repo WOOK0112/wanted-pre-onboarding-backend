@@ -2,6 +2,7 @@ package com.wanted.assignment.notice.controller;
 
 import com.wanted.assignment.company.Company;
 import com.wanted.assignment.company.CompanyService;
+import com.wanted.assignment.notice.dto.NoticePatchDto;
 import com.wanted.assignment.notice.dto.NoticePostDto;
 import com.wanted.assignment.notice.entity.Notice;
 import com.wanted.assignment.notice.mapper.NoticeMapper;
@@ -34,6 +35,29 @@ public class NoticeController {
         Notice notice = noticeService.createNotice(noticeMapper.noticePostDtoToNotice(noticePostDto, company));
 
         return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{notice-id}")
+    public ResponseEntity getNotice(@PathVariable("notice-id") long noticeId) {
+        Notice notice = noticeService.findNotice(noticeId);
+
+        return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{company-id}")
+    public ResponseEntity patchNotice (@PathVariable("company-id") long companyId,
+                                       @RequestBody NoticePatchDto noticePatchDto) {
+        Notice notice = noticeService.updateNotice(noticePatchDto, companyId);
+
+        return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{company-id}")
+    public ResponseEntity deleteNotice(@PathVariable("company-id") long companyId,
+                                       @RequestParam("noticeId") long noticeId) {
+        noticeService.deleteNotice(companyId, noticeId);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

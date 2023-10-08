@@ -1,6 +1,7 @@
 package com.wanted.assignment.notice.mapper;
 
 import com.wanted.assignment.company.Company;
+import com.wanted.assignment.notice.dto.NoticePatchDto;
 import com.wanted.assignment.notice.dto.NoticePostDto;
 import com.wanted.assignment.notice.dto.NoticeResponseDto;
 import com.wanted.assignment.notice.entity.Notice;
@@ -17,8 +18,11 @@ public interface NoticeMapper {
                 .payment(noticePostDto.getPayment())
                 .content(noticePostDto.getContent())
                 .techStack(noticePostDto.getTechStack())
+                .company(company)
                 .build();
     }
+
+    Notice noticePatchDtoToNotice (NoticePatchDto noticePatchDto, Company company);
 
     NoticeResponseDto noticeToNoticeResponseDto (Notice notice);
 }
