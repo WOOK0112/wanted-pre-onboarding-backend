@@ -20,7 +20,7 @@ public class CompanyController {
 
     @GetMapping("{company-id}")
     public Company getCompany (@PathVariable("company-id") long companyId) {
-        Company company = companyService.findCompany(companyId);
+        Company company = companyService.getCompany(companyId);
 
         return company;
     }

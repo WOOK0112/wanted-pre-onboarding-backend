@@ -14,7 +14,7 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public Company findCompany (long companyId) {
+    public Company getCompany(long companyId) {
         Optional<Company> company = companyRepository.findById(companyId);
 
         return company.orElseThrow(
