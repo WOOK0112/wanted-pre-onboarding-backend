@@ -36,7 +36,7 @@ public class NoticeController {
     @PostMapping("/{company-id}")
     public ResponseEntity postNotice (@PathVariable("company-id") long companyId,
                                       @RequestBody NoticePostDto noticePostDto) {
-        Company company = companyService.findCompany(companyId);
+        Company company = companyService.getCompany(companyId);
         Notice notice = noticeService.createNotice(noticeMapper.noticePostDtoToNotice(noticePostDto, company));
 
         return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.CREATED);
