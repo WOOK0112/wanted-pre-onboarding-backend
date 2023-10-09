@@ -7,6 +7,8 @@ import com.wanted.assignment.notice.dto.NoticeResponseDto;
 import com.wanted.assignment.notice.entity.Notice;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface NoticeMapper {
     default Notice noticePostDtoToNotice (NoticePostDto noticePostDto, Company company) {
@@ -21,6 +23,8 @@ public interface NoticeMapper {
                 .company(company)
                 .build();
     }
+
+    List<NoticeResponseDto> noticesToNoticeResponseDtos(List<Notice> notices);
 
     Notice noticePatchDtoToNotice (NoticePatchDto noticePatchDto, Company company);
 

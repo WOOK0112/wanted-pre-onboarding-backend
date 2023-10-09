@@ -4,6 +4,9 @@ import com.wanted.assignment.notice.dto.NoticePatchDto;
 import com.wanted.assignment.notice.entity.Notice;
 import com.wanted.assignment.notice.repository.NoticeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,9 +28,12 @@ public class NoticeService {
     public Notice findNotice(long noticeId) {
         Optional<Notice> optionalNotice = noticeRepository.findById(noticeId);
 
-        return optionalNotice.orElseThrow(
-                () -> new RuntimeException()
-        );
+        return optionalNotice.orElseThrow( () -> new RuntimeException() );
+    }
+
+    public Page<Notice> findNotices(int page, int size) {
+        return noticeRepository.findAll(PageRequest.of(page, size,
+                Sort.by("noticeId").descending()));
     }
 
     public Notice updateNotice(NoticePatchDto patchDto, long companyId) {
