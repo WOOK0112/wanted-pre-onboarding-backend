@@ -3,6 +3,8 @@ package com.wanted.assignment;
 import com.google.gson.Gson;
 import com.wanted.assignment.company.Company;
 import com.wanted.assignment.company.CompanyRepository;
+import com.wanted.assignment.member.Member;
+import com.wanted.assignment.member.MemberRepository;
 import com.wanted.assignment.notice.dto.NoticePostDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ class AssignmentApplicationTests {
 	@Autowired
 	private CompanyRepository companyRepository;
 
+	@Autowired
+	private MemberRepository memberRepository;
+
 	@Test
 	void postCompanyTest() {
 		Company company = new Company();
@@ -31,6 +36,16 @@ class AssignmentApplicationTests {
 
 		companyRepository.save(company);
 	}
+
+	@Test
+	void postMemberTest() {
+		Member member = new Member();
+		member.setName("홍길동");
+
+		memberRepository.save(member);
+	}
+
+
 
 
 }
