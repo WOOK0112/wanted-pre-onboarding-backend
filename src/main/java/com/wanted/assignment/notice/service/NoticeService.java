@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,19 +26,24 @@ public class NoticeService {
         return noticeRepository.save(notice);
     }
 
-    public Notice findNotice(long noticeId) {
+    public Notice getNotice(long noticeId) {
         Optional<Notice> optionalNotice = noticeRepository.findById(noticeId);
 
         return optionalNotice.orElseThrow( () -> new RuntimeException() );
     }
 
-    public Page<Notice> findNotices(int page, int size) {
+    public Page<Notice> getNotices(int page, int size) {
         return noticeRepository.findAll(PageRequest.of(page, size,
                 Sort.by("noticeId").descending()));
     }
 
+    //회사가 작성한 채용공고 목록 Id를 불러오는 메서드
+    public List<Long> getMyNoticeIdList(long companyId) {
+        return noticeRepository.findNoticeIdList(companyId);
+    }
+
     public Notice updateNotice(NoticePatchDto patchDto, long companyId) {
-        Notice findNotice = findNotice(patchDto.getNoticeId());
+        Notice findNotice = getNotice(patchDto.getNoticeId());
 
         //수정할 채용공고를 작성한 회사가 맞는지 검증
         if(findNotice.getCompany().getCompanyId() != companyId) new RuntimeException();
@@ -55,7 +61,7 @@ public class NoticeService {
     }
 
     public void deleteNotice(long companyId, long noticeId) {
-        Notice findNotice = findNotice(noticeId);
+        Notice findNotice = getNotice(noticeId);
 
         //수정할 채용공고를 작성한 회사가 맞는지 검증
         if(findNotice.getCompany().getCompanyId() != companyId) new RuntimeException();

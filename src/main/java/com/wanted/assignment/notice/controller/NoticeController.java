@@ -44,15 +44,16 @@ public class NoticeController {
 
     @GetMapping("/{notice-id}")
     public ResponseEntity getNotice(@PathVariable("notice-id") long noticeId) {
-        Notice notice = noticeService.findNotice(noticeId);
+        Notice notice = noticeService.getNotice(noticeId);
+        List<Long> noticeIdList = noticeService.getMyNoticeIdList(notice.getCompany().getCompanyId());
 
-        return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.OK);
+        return new ResponseEntity(noticeMapper.noticeToNoticeDetailResponseDto(notice, noticeIdList), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getNotices(@Positive @RequestParam("page") int page,
                                      @Positive @RequestParam("size") int size) {
-        Page<Notice> pageNotice = noticeService.findNotices(page-1, size);
+        Page<Notice> pageNotice = noticeService.getNotices(page-1, size);
         List<Notice> notices = pageNotice.getContent();
 
         return new ResponseEntity(
