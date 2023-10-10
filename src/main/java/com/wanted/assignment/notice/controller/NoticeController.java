@@ -61,6 +61,18 @@ public class NoticeController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity searchNotice(@RequestParam("keyword") String keyword,
+                                       @Positive @RequestParam("page") int page,
+                                       @Positive @RequestParam("size") int size) {
+        Page<Notice> pageNotice = noticeService.getSearchNotices(keyword, page-1, size);
+        List<Notice> notices = pageNotice.getContent();
+
+        return new ResponseEntity(
+                new MultiResponseDto<>(noticeMapper.noticesToNoticeResponseDtos(notices), pageNotice),
+                HttpStatus.OK);
+    }
+
     @PatchMapping("/{company-id}")
     public ResponseEntity patchNotice (@PathVariable("company-id") long companyId,
                                        @RequestBody NoticePatchDto noticePatchDto) {

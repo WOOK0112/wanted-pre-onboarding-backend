@@ -37,9 +37,13 @@ public class NoticeService {
                 Sort.by("noticeId").descending()));
     }
 
+    public Page<Notice> getSearchNotices(String keyword, int page, int size) {
+        return noticeRepository.findByKeyword(keyword, PageRequest.of(page, size));
+    }
+
     //회사가 작성한 채용공고 목록 Id를 불러오는 메서드
     public List<Long> getMyNoticeIdList(long companyId) {
-        return noticeRepository.findNoticeIdList(companyId);
+        return noticeRepository.findByNoticeIdList(companyId);
     }
 
     public Notice updateNotice(NoticePatchDto patchDto, long companyId) {
