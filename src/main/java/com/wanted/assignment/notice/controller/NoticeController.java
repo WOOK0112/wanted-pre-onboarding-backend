@@ -2,6 +2,8 @@ package com.wanted.assignment.notice.controller;
 
 import com.wanted.assignment.company.Company;
 import com.wanted.assignment.company.CompanyService;
+import com.wanted.assignment.member.MemberService;
+import com.wanted.assignment.notice.dto.ApplicationNoticeResponseDto;
 import com.wanted.assignment.notice.dto.NoticePatchDto;
 import com.wanted.assignment.notice.dto.NoticePostDto;
 import com.wanted.assignment.notice.entity.Notice;
@@ -27,21 +29,20 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final NoticeMapper noticeMapper;
     private final CompanyService companyService;
+    private final MemberService memberService;
 
-    public NoticeController(NoticeService noticeService, NoticeMapper noticeMapper, CompanyService companyService) {
+    public NoticeController(NoticeService noticeService, NoticeMapper noticeMapper, CompanyService companyService, MemberService memberService) {
         this.noticeService = noticeService;
         this.noticeMapper = noticeMapper;
         this.companyService = companyService;
+        this.memberService = memberService;
     }
 
     @PostMapping("/{company-id}")
     public ResponseEntity postNotice (@Positive @PathVariable("company-id") long companyId,
                                       @Valid @RequestBody NoticePostDto noticePostDto) {
-            log.info("스타트1");
             Company company = companyService.getCompany(companyId);
-            log.info("스타트2");
             Notice notice = noticeService.createNotice(noticeMapper.noticePostDtoToNotice(noticePostDto, company));
-            log.info("스타트3");
 
             return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.CREATED);
     }
@@ -52,6 +53,17 @@ public class NoticeController {
         List<Long> noticeIdList = noticeService.getMyNoticeIdList(notice.getCompany().getCompanyId());
 
         return new ResponseEntity(noticeMapper.noticeToNoticeDetailResponseDto(notice, noticeIdList), HttpStatus.OK);
+    }
+
+    @GetMapping("/member/{member-id}")
+    public ResponseEntity getMyApplicationNotice(@PathVariable("member-id") long memberId) {
+        memberService.getMember(memberId);
+        List<Long> noticeIdList = noticeService.getMyApplicationNoticeIdList(memberId);
+
+        return new ResponseEntity(ApplicationNoticeResponseDto.builder()
+                .memberId(memberId)
+                .noticeIdList(noticeIdList)
+                .build(), HttpStatus.OK);
     }
 
     @GetMapping

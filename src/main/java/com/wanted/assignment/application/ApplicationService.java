@@ -38,9 +38,4 @@ public class ApplicationService {
 
         return applicationRepository.save(application);
     }
-
-    public Application getApplication(Long noticeId, Long memberId) {
-        return applicationRepository.findByNoticeNoticeIdAndMemberMemberId(noticeId, memberId);
-    }
-
 }

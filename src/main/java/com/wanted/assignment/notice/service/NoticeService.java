@@ -1,5 +1,6 @@
 package com.wanted.assignment.notice.service;
 
+import com.wanted.assignment.application.ApplicationRepository;
 import com.wanted.assignment.exception.BusinessLogicException;
 import com.wanted.assignment.exception.ExceptionCode;
 import com.wanted.assignment.notice.dto.NoticePatchDto;
@@ -19,9 +20,11 @@ import java.util.Optional;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
+    private final ApplicationRepository applicationRepository;
 
-    public NoticeService(NoticeRepository noticeRepository) {
+    public NoticeService(NoticeRepository noticeRepository, ApplicationRepository applicationRepository) {
         this.noticeRepository = noticeRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     public Notice createNotice(Notice notice) {
@@ -43,9 +46,14 @@ public class NoticeService {
         return noticeRepository.findByKeyword(keyword, PageRequest.of(page, size));
     }
 
-    //회사가 작성한 채용공고 목록 Id를 불러오는 메서드
+    //회사가 작성한 채용공고 Id 목록을 불러오는 메서드
     public List<Long> getMyNoticeIdList(long companyId) {
         return noticeRepository.findByNoticeIdList(companyId);
+    }
+
+    //사용자가 지원한 채용공고 Id 목록을 불러오는 메서드
+    public List<Long> getMyApplicationNoticeIdList(long memberId) {
+        return applicationRepository.findNoticeIdListByMemberId(memberId);
     }
 
     public Notice updateNotice(NoticePatchDto patchDto, long companyId) {

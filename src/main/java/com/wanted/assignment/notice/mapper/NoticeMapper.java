@@ -27,8 +27,6 @@ public interface NoticeMapper {
 
     List<NoticeResponseDto> noticesToNoticeResponseDtos(List<Notice> notices);
 
-    Notice noticePatchDtoToNotice (NoticePatchDto noticePatchDto, Company company);
-
     NoticeResponseDto noticeToNoticeResponseDto (Notice notice);
 
     default NoticeDetailResponseDto noticeToNoticeDetailResponseDto (Notice notice, List<Long> noticeIdList){
@@ -43,5 +41,5 @@ public interface NoticeMapper {
                 .techStack(notice.getTechStack())
                 .idList(noticeIdList)
                 .build();
-    };
+    }
 }
