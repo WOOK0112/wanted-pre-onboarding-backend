@@ -1,5 +1,7 @@
 package com.wanted.assignment.notice.service;
 
+import com.wanted.assignment.exception.BusinessLogicException;
+import com.wanted.assignment.exception.ExceptionCode;
 import com.wanted.assignment.notice.dto.NoticePatchDto;
 import com.wanted.assignment.notice.entity.Notice;
 import com.wanted.assignment.notice.repository.NoticeRepository;
@@ -29,7 +31,7 @@ public class NoticeService {
     public Notice getNotice(long noticeId) {
         Optional<Notice> optionalNotice = noticeRepository.findById(noticeId);
 
-        return optionalNotice.orElseThrow( () -> new RuntimeException() );
+        return optionalNotice.orElseThrow( () -> new BusinessLogicException(ExceptionCode.NOTICE_NOT_FOUND) );
     }
 
     public Page<Notice> getNotices(int page, int size) {
@@ -50,7 +52,7 @@ public class NoticeService {
         Notice findNotice = getNotice(patchDto.getNoticeId());
 
         //수정할 채용공고를 작성한 회사가 맞는지 검증
-        if(findNotice.getCompany().getCompanyId() != companyId) new RuntimeException();
+        if(findNotice.getCompany().getCompanyId() != companyId) new BusinessLogicException(ExceptionCode.COMPANY_DOES_NOT_MATCH);
 
         Optional.ofNullable(patchDto.getPosition())
                 .ifPresent(position->findNotice.setPosition(position));
@@ -68,8 +70,7 @@ public class NoticeService {
         Notice findNotice = getNotice(noticeId);
 
         //수정할 채용공고를 작성한 회사가 맞는지 검증
-        if(findNotice.getCompany().getCompanyId() != companyId) new RuntimeException();
-
+        if(findNotice.getCompany().getCompanyId() != companyId) new RuntimeException();new BusinessLogicException(ExceptionCode.COMPANY_DOES_NOT_MATCH);
         noticeRepository.delete(findNotice);
     }
 

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -34,12 +35,15 @@ public class NoticeController {
     }
 
     @PostMapping("/{company-id}")
-    public ResponseEntity postNotice (@PathVariable("company-id") long companyId,
-                                      @RequestBody NoticePostDto noticePostDto) {
-        Company company = companyService.getCompany(companyId);
-        Notice notice = noticeService.createNotice(noticeMapper.noticePostDtoToNotice(noticePostDto, company));
+    public ResponseEntity postNotice (@Positive @PathVariable("company-id") long companyId,
+                                      @Valid @RequestBody NoticePostDto noticePostDto) {
+            log.info("스타트1");
+            Company company = companyService.getCompany(companyId);
+            log.info("스타트2");
+            Notice notice = noticeService.createNotice(noticeMapper.noticePostDtoToNotice(noticePostDto, company));
+            log.info("스타트3");
 
-        return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.CREATED);
+            return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.CREATED);
     }
 
     @GetMapping("/{notice-id}")
@@ -75,7 +79,7 @@ public class NoticeController {
 
     @PatchMapping("/{company-id}")
     public ResponseEntity patchNotice (@PathVariable("company-id") long companyId,
-                                       @RequestBody NoticePatchDto noticePatchDto) {
+                                       @Valid @RequestBody NoticePatchDto noticePatchDto) {
         Notice notice = noticeService.updateNotice(noticePatchDto, companyId);
 
         return new ResponseEntity(noticeMapper.noticeToNoticeResponseDto(notice), HttpStatus.CREATED);

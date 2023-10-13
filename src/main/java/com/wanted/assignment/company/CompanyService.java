@@ -1,5 +1,7 @@
 package com.wanted.assignment.company;
 
+import com.wanted.assignment.exception.BusinessLogicException;
+import com.wanted.assignment.exception.ExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ public class CompanyService {
         Optional<Company> company = companyRepository.findById(companyId);
 
         return company.orElseThrow(
-                () -> new RuntimeException()
+                () -> new BusinessLogicException(ExceptionCode.COMPANY_NOT_FOUND)
         );
     }
 }

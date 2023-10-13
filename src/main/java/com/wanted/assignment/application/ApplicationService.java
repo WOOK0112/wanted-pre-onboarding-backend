@@ -1,6 +1,7 @@
 package com.wanted.assignment.application;
 
-import com.wanted.assignment.company.CompanyService;
+import com.wanted.assignment.exception.BusinessLogicException;
+import com.wanted.assignment.exception.ExceptionCode;
 import com.wanted.assignment.member.MemberService;
 import com.wanted.assignment.notice.service.NoticeService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class ApplicationService {
         Optional<Application> applicationOptional = Optional.ofNullable(applicationRepository.findByNoticeNoticeIdAndMemberMemberId(noticeId, memberId));
 
         applicationOptional.ifPresent(application -> {
-            throw new RuntimeException("Application already exists");
+            throw new BusinessLogicException(ExceptionCode.APPLICATION_EXISTS);
         });
 
         Application application = new Application();
